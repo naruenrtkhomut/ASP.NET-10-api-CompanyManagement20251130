@@ -19,9 +19,6 @@ namespace api
             /** database connections */
             await configuration.AddDatabaseConnections(builder);
 
-            NpgsqlConnection conn = new NpgsqlConnection();
-            if (conn != null) Console.WriteLine(conn.State);
-
             // Add services to the container.
 
             builder.Services.AddControllers();
