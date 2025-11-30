@@ -144,16 +144,18 @@ namespace api.Models
         }
 
         /** JWT generator */
-        public string GenerateJWT(string? inValue)
+        public string GenerateJWT(string? inUsername, string? inRule)
         {
-            inValue = (inValue ?? string.Empty).Trim();
-            if (string.IsNullOrEmpty(inValue)) return string.Empty;
+            inUsername = (inUsername ?? string.Empty).Trim();
+            inRule = (inRule ?? string.Empty).Trim();
+            if (string.IsNullOrEmpty(inUsername)) return string.Empty;
+            if (string.IsNullOrEmpty(inRule)) return string.Empty;
             if (string.IsNullOrEmpty(JWTSecretKey)) return string.Empty;
 
             Claim[] claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, inValue),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Name, inUsername),
+                new Claim(ClaimTypes.Role, inRule)
             };
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWTSecretKey));
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -196,7 +198,8 @@ namespace api.Models
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = JWTIssue,
                     ValidAudience = JWTAudience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(EncryptionKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(EncryptionKey)),
+                    RoleClaimType = ClaimTypes.Role
                 };
             });
             webBuilder.Services.AddAuthorization();

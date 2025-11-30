@@ -38,14 +38,15 @@ namespace api.Controllers
                 { "password", Program.configuration.GetEncryption(inUserLogin.Password) }
             });
             int getResult = int.TryParse((getData["result"] ?? "").ToObject<string>() ?? "", out getResult) ? getResult : 0;
+            string getMessage = (getData["message"] ?? "").ToObject<string>() ?? "";
             if (getResult != 1) return Ok(new { result = getResult, message = "Admin login failed" });
-            string getJWTToken = Program.configuration.GenerateJWT(inUserLogin.Username);
+            string getJWTToken = Program.configuration.GenerateJWT(inUserLogin.Username, getMessage);
             return Ok(new { result = getResult, message = getJWTToken });
         }
 
 
         /** getting postgresql server version */
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         [Route("postgresql/server-version")]
         public async Task<IActionResult> GetPSQL_SERVER_VERSION()
