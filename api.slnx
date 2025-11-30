@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="../Api_TEST/Api_TEST.csproj" Id="26391c8a-2002-40de-8a19-5a30d2cc6bfa" />
+  <Project Path="../ClientApp/ClientApp.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="../ClientApp_TEST/ClientApp_TEST.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="api.csproj" />
+</Solution>
